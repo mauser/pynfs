@@ -71,7 +71,8 @@ class NFS4Client(rpc.Client, rpc.Server):
     def compound_async(self, ops, credinfo=None, pipe=None,
                        tag=None, version=None, checks=True,
                        packer=nfs4lib.FancyNFS4Packer):
-        if tag is None:
+        print "compound_async"
+	if tag is None:
             tag = self.tag
         if version is None:
             version = self.minorversion
@@ -81,14 +82,18 @@ class NFS4Client(rpc.Client, rpc.Server):
             pipe = self.c1
         p = packer(check_enum=checks, check_array=checks)
         c4 = COMPOUND4args(tag, version, ops)
-        if SHOW_TRAFFIC:
+	import pprint
+	pp = pprint.PrettyPrinter(indent=4)
+	if SHOW_TRAFFIC:
             print
             print c4
         p.pack_COMPOUND4args(c4)
-        return self.send_call(pipe, 1, p.get_buffer(), credinfo)
+        
+	pp.pprint(p.get_buffer() )
+	return self.send_call(pipe, 1, p.get_buffer(), credinfo)
 
     def compound(self, *args, **kwargs):
-        self.tag = self.create_tag()
+	self.tag = self.create_tag()
         xid = self.compound_async(*args, **kwargs)
         pipe = kwargs.get("pipe", None)
         res = self.listen(xid, pipe=pipe)
@@ -470,6 +475,7 @@ class SessionRecord(object):
         return slot, seq_op
  
     def compound_async(self, ops, **kwargs):
+        print "call compound_async \n"
         slot, seq_op = self._prepare_compound(kwargs)
         slot.xid = self.c.compound_async([seq_op] + ops, **kwargs)
         return slot
@@ -482,7 +488,9 @@ class SessionRecord(object):
         return res
 
     def compound(self, ops, **kwargs):
-        max_retries = 10
+        print "call compound \n"
+        log_cb.debug("Calling compound")
+	max_retries = 10
         delay_time = 1
         handle_state_errors = kwargs.pop("handle_state_errors", True)
         saved_kwargs = kwargs

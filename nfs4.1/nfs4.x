@@ -2498,7 +2498,10 @@ struct DESTROY_CLIENTID4args {
 };
 
 struct ADVISE4args {
-        clientid4       dca_clientid;
+        stateid4        stateid;
+        offset4         offset;
+        count4          count;
+	bitmap4		advice;
 };
 
 struct ADVISE4res {

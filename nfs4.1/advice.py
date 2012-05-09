@@ -1,7 +1,9 @@
 #!/usr/bin/python
 from  nfs4client import NFS4Client
-
+from nfs4_type import stateid4
 import nfs4_ops as op
 
+print "<----- Starting advice!!! ------------->"
 n = NFS4Client()
-n.compound([op.advise(2)])
+stateid = stateid4(0, "12")
+n.compound([op.advise(stateid,20,10,2)])
