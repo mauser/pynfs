@@ -2497,6 +2497,14 @@ struct DESTROY_CLIENTID4args {
         clientid4       dca_clientid;
 };
 
+struct ADVISE4args {
+        clientid4       dca_clientid;
+};
+
+struct ADVISE4res {
+        nfsstat4        dcr_status;
+};
+
 struct DESTROY_CLIENTID4res {
         nfsstat4        dcr_status;
 };
@@ -2580,6 +2588,7 @@ enum nfs_opnum4 {
  OP_WANT_DELEGATION     = 56,
  OP_DESTROY_CLIENTID    = 57,
  OP_RECLAIM_COMPLETE    = 58,
+ OP_ADVISE		= 59,
  OP_ILLEGAL             = 10044
 };
 
@@ -2680,6 +2689,8 @@ union nfs_argop4 switch (nfs_opnum4 argop) {
  case OP_DESTROY_CLIENTID:
                         DESTROY_CLIENTID4args
                                 opdestroy_clientid;
+ case OP_ADVISE:
+			ADVISE4args opadvise;
 
  case OP_RECLAIM_COMPLETE:
                         RECLAIM_COMPLETE4args
@@ -2795,6 +2806,12 @@ union nfs_resop4 switch (nfs_opnum4 resop){
                         DESTROY_CLIENTID4res
                                 opdestroy_clientid;
 
+ case OP_ADVISE:
+                        ADVISE4res
+                                opadvise;
+
+
+ 
  case OP_RECLAIM_COMPLETE:
                         RECLAIM_COMPLETE4res
                                 opreclaim_complete;
