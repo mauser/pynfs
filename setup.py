@@ -27,7 +27,8 @@ def setup(*args, **kwargs):
     for dir in DIRS:
         print "\n\nMoving to %s" % dir 
         os.chdir(join(cwd, dir))
-        os.system("python %s" % command)
+        print "Using command: %s" % command
+	os.system("python %s" % command)
     os.chdir(cwd)
 
 setup(name = "pynfs",
